@@ -1,7 +1,7 @@
 Summary:        CPU frequency adjusting daemon
 Name:           cpuspeed
 Version:        1.5
-Release:        19%{?dist}
+Release:        20%{?dist}
 Epoch:          1
 Group:          System Environment/Base
 License:        GPLv2+
@@ -81,6 +81,9 @@ fi
 exit 0
 
 %changelog
+* Fri Jun 28 2013 Petr Šabata <contyk@redhat.com> - 1:1.5-20
+- Read cpuinfo_max_speed instead of scaling_available_frequencies (#902134)
+
 * Tue Nov 27 2012 Petr Šabata <contyk@redhat.com> - 1:1.5-19
 - Fix the naive method of getting the highest available scaling frequency (#876738)
 

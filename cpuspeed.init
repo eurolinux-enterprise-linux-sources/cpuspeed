@@ -238,7 +238,7 @@ start() {
       if [ -n "$MAX_SPEED" ]; then
         adjust_cpufreq scaling_max_freq $MAX_SPEED
       else
-        adjust_cpufreq scaling_max_freq `sed 's/ /\n/g' $cpu/cpufreq/scaling_available_frequencies | sort -nr | head -n1`
+        adjust_cpufreq scaling_max_freq `cat $cpu0freqd/cpuinfo_max_freq`
       fi
       if [ -n "$UP_THRESHOLD" -a ${governor} == "ondemand" ]; then
         adjust_cpufreq ondemand/up_threshold $UP_THRESHOLD
