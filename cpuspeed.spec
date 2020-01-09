@@ -1,7 +1,7 @@
 Summary:        CPU frequency adjusting daemon
 Name:           cpuspeed
 Version:        1.5
-Release:        18%{?dist}
+Release:        19%{?dist}
 Epoch:          1
 Group:          System Environment/Base
 License:        GPLv2+
@@ -81,6 +81,9 @@ fi
 exit 0
 
 %changelog
+* Tue Nov 27 2012 Petr Šabata <contyk@redhat.com> - 1:1.5-19
+- Fix the naive method of getting the highest available scaling frequency (#876738)
+
 * Mon Oct 08 2012 Petr Šabata <contyk@redhat.com> - 1:1.5-18
 - Fix #738463 for real this time.
 
