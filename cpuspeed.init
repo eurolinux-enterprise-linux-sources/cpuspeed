@@ -85,10 +85,10 @@ adjust_cpufreq() {
   # First arg is a param under $cpu/cpufreq/
   # Second arg is the value you want to set that param to
   if $(echo ${1} | grep -qE '(threshold|ignore_nice_load)'); then
-    echo $2 > $cpufreq/$1
+    [ -f $cpufreq/$1 ] && echo $2 > $cpufreq/$1
   else
     for cpu in ${cpus}; do
-      echo $2 > $cpu/cpufreq/$1
+      [ -f $cpu/cpufreq/$1 ] && echo $2 > $cpu/cpufreq/$1
     done
   fi
 }
@@ -199,6 +199,11 @@ start() {
 	# in-kernel scaling or starting up the cpuspeed daemon in this case
         default_governor=p4passive
         ;;
+      intel_pstate)
+        default_governor=powersave
+        echo "CPU states managed by intel_pstate; use cpupower for configuration."
+        $logger "CPU states managed by intel_pstate; use cpupower for configuration."
+        ;;
       *)
         default_governor=userspace
         ;;
@@ -280,13 +285,17 @@ stop() {
   [ ! -f ${cpu0freqd}/scaling_driver ] && return 0
   drv=`cat ${cpu0freqd}/scaling_driver`
   governor_module_loaded && module_loaded=true
-
-  if [ "${governor}" != "userspace" ]; then
+  if [ "${drv}" != "intel_pstate" -a "${governor}" != "userspace" ] ||
+      [ "${drv}" == "intel_pstate" -a "${governor}" != "powersave" ]; then
     echo -n "Disabling ${governor} cpu frequency scaling: "
     $logger "Disabling ${governor} cpu frequency scaling governor"
     for cpu in ${cpus}; do
-      echo userspace > $cpu/cpufreq/scaling_governor
-      cat $cpu/cpufreq/cpuinfo_max_freq > $cpu/cpufreq/scaling_setspeed
+      if [ "${drv}" == "intel_pstate" ]; then
+        echo powersave > $cpu/cpufreq/scaling_governor
+      else
+        echo userspace > $cpu/cpufreq/scaling_governor
+        cat $cpu/cpufreq/cpuinfo_max_freq > $cpu/cpufreq/scaling_setspeed
+      fi
     done
     if [ $module_loaded == true ]; then
       /sbin/modprobe -r cpufreq-${governor}

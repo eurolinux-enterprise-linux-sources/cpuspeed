@@ -1,7 +1,7 @@
 Summary:        CPU frequency adjusting daemon
 Name:           cpuspeed
 Version:        1.5
-Release:        20%{?dist}
+Release:        22%{?dist}
 Epoch:          1
 Group:          System Environment/Base
 License:        GPLv2+
@@ -81,6 +81,12 @@ fi
 exit 0
 
 %changelog
+* Tue Jun 16 2015 Petr Šabata <contyk@redhat.com> - 1:1.5-22
+- Handle scaling governors properly on intel_pstate systems (#1230918)
+
+* Fri May 29 2015 Petr Šabata <contyk@redhat.com> - 1:1.5-21
+- Bail out if performance is managed by intel_pstate (#1211828, #1219780, #1225024, #1196755)
+
 * Fri Jun 28 2013 Petr Šabata <contyk@redhat.com> - 1:1.5-20
 - Read cpuinfo_max_speed instead of scaling_available_frequencies (#902134)
 
