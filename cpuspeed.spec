@@ -1,7 +1,7 @@
 Summary:        CPU frequency adjusting daemon
 Name:           cpuspeed
 Version:        1.5
-Release:        15%{?dist}
+Release:        18%{?dist}
 Epoch:          1
 Group:          System Environment/Base
 License:        GPLv2+
@@ -81,6 +81,22 @@ fi
 exit 0
 
 %changelog
+* Mon Oct 08 2012 Petr Šabata <contyk@redhat.com> - 1:1.5-18
+- Fix #738463 for real this time.
+
+* Thu Sep 13 2012 Marcela Mašláňová <mmaslano@redhat.com> 1:1.5-17
+- Cpuspeed init script still tries to adjust cpufreq sysfiles on a per core 
+  basis 738463
+- IGNORE_NICE parameter does opposite of what it says (thanks to Minto Joseph)
+  797055
+- Cpuspeed does not reset MIN/MAX values when config file is emptied 616976
+- Resolves: rhbz#738463, rhbz#797055, rhbz#616976
+
+* Fri Sep  4 2012 Marcela Mašláňová <mmaslano@redhat.com> 1:1.5-16
+- Whenever PCC driver is loaded, it loads the “userspace” governor, instead 
+  of the “ondemand” governor.
+- Resolves: rhbz#642838
+
 * Tue Jul 20 2010 Matthew Garrett <mjg@redhat.com> 1:1.5-15
 - Init scipt: Add support for loading the pcc-cpufreq driver
 - Resolves: rhbz#609659

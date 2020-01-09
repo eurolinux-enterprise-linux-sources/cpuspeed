@@ -35,7 +35,9 @@ if [ -f /etc/sysconfig/$prog ]; then
 fi
 
 cpu0freqd=/sys/devices/system/cpu/cpu0/cpufreq
-cpus='/sys/devices/system/cpu/cpu[0-9]*'
+globfreq='/sys/devices/system/cpu'
+cpufreq="${globfreq}/cpufreq"
+cpus="${globfreq}/cpu[0-9]*"
 testpat="${cpus}/cpufreq/scaling_driver"
 lockfile="/var/lock/subsys/$prog"
 xendir="/proc/xen"
@@ -82,9 +84,13 @@ governor_module_loaded() {
 adjust_cpufreq() {
   # First arg is a param under $cpu/cpufreq/
   # Second arg is the value you want to set that param to
-  for cpu in ${cpus}; do
-    echo $2 > $cpu/cpufreq/$1
-  done
+  if $(echo ${1} | grep -qE '(threshold|ignore_nice_load)'); then
+    echo $2 > $cpufreq/$1
+  else
+    for cpu in ${cpus}; do
+      echo $2 > $cpu/cpufreq/$1
+    done
+  fi
 }
 
 start_cpuspeed() {
@@ -112,7 +118,7 @@ start_cpuspeed() {
   if [ -n "$MAX_SPEED" ]; then
     OPTS="$OPTS -M $MAX_SPEED"
   fi
-  if [ "$IGNORE_NICE" -eq 1 ]; then
+  if [ "$IGNORE_NICE" -eq 0 ]; then
     OPTS="$OPTS -n"
   fi
   daemon $prog -d $OPTS
@@ -185,7 +191,7 @@ start() {
 
     # Figure out default governor to use
     case "$drv" in
-      centrino|powernow-k8|acpi-cpufreq|e_powersaver)
+      centrino|powernow-k8|pcc-cpufreq|acpi-cpufreq|e_powersaver)
         default_governor=ondemand
         ;;
       p4-clockmod)
@@ -226,9 +232,13 @@ start() {
     else
       if [ -n "$MIN_SPEED" ]; then
         adjust_cpufreq scaling_min_freq $MIN_SPEED
+      else
+        adjust_cpufreq scaling_min_freq 0
       fi
       if [ -n "$MAX_SPEED" ]; then
         adjust_cpufreq scaling_max_freq $MAX_SPEED
+      else
+        adjust_cpufreq scaling_max_freq `cut -d " " -f 1 $cpu/cpufreq/scaling_available_frequencies`
       fi
       if [ -n "$UP_THRESHOLD" -a ${governor} == "ondemand" ]; then
         adjust_cpufreq ondemand/up_threshold $UP_THRESHOLD
