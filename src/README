@@ -1,0 +1,54 @@
+CPUSpeed v1.5
+
+Carl Thompson <cet@carlthompson.net>
+
+This program monitors the system's idle percentage and reduces or raises the
+CPUs' clock speeds and voltages accordingly to minimize power consumption
+when idle and maximize performance when needed.  This is the default.
+
+The program may also optionally be configured to reduce the CPUs' clock
+speeds if the temperature gets too high, NOT minimize their speeds if the
+computer's AC adapter is disconnected or maximize their speeds when the AC
+adapter is connected.
+
+By default this program will manage every CPU found in the system.
+
+This program is only for computers with Linux kernels compiled with CPUFreq.
+You must have a CPU that supports frequency and / or voltage scaling via
+CPUFreq to use this program.  Your kernel must be compiled to support the
+"userspace" CPUFreq governor and the "sysfs" interface used by Linux 2.6.
+CPUSpeed no longer supports the "proc" interface used by Linux 2.4. If you
+need this please use version 1.2.x.
+
+I use this program on my Dell and HP laptops and netbooks to increase
+battery life and control performance.
+
+
+To build:
+
+    make
+
+To install (as root):
+
+    make install_redhat
+
+   or
+
+   make install_suse
+
+   or
+
+   make install_debian (not implemented yet)
+
+After installation, edit and uncomment the "OPTS" line in the cpuspeed config
+file (maybe /etc/sysconfig/cpuspeed or /etc/sysconfig/powersave/cpuspeed) if
+you would like to specify any options when CPUSpeed is started.  You may also
+edit the "DRIVER" line to specify the cpufreq driver the startup script should
+attempt to load.
+
+Contributors:
+    Enrico Tassi <tassi@cs.unibo.it>
+
+For details on CPUSpeed command line options run
+
+    cpuspeed -h

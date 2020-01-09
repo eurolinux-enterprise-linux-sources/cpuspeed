@@ -1,0 +1,97 @@
+cpuspeed v1.5
+
+This program monitors the system's idle percentage and reduces or raises the
+CPU cores' clock speeds accordingly to minimize power usage when idle and
+maximize performance when needed. By default the program counts time used by
+nice()d programs and time used waiting for IO as idle time.
+
+The program may also optionally be configured to reduce the CPU cores' clock
+speeds if the temperature gets too high or minimize their speeds if the
+computer's AC adapter is disconnected.
+
+By default this program will manage every CPU core found in the system.
+
+Usage: cpuspeed [Options]
+
+    Options:
+        -d
+            Tells the process to daemonize itself (run in background).
+
+        -i <interval>
+            Sets the interval between idle percentage tests and possible speed
+            changes in tenths of a second (default is 20).
+
+        -p <fast up> <threshold>
+            Sets the CPU core idle percentage thresholds. <fast up> is the idle
+            percentage below which a CPU will be set to the highest possible
+            speed. <threshold> is the idle percentage above which a CPU's
+            speed will be decreased and below which a CPU's speed will be
+            increased (defaults are 10 and 25).
+
+        -m <minimum speed>
+            Sets the minimum speed in KHz below which a CPU core won't be set.
+
+        -M <maximum speed>
+            Sets the maximum speed in KHz above which a CPU core won't be set.
+
+        -n
+            Do not treat niced programs as idle time.
+
+        -w
+            Do not treat time waiting for IO as idle time.
+
+        -t <temp file> <maxtemp>
+            Sets the ACPI temperature file and the temperature at which CPU
+            cores will be set to minimum speed.
+
+        -T <interval>
+            Sets the interval at which the temperature will be polled in
+            tenths  of a second (default is 10).
+            (Requires the '-t' option above.)
+
+        -a <AC file>
+            Sets the ACPI AC adapter state file and tells the program to set
+            the CPU cores to minimum speed when the AC adapter is disconnected.
+            (This is the default but is changeable by the '-D' option below).
+
+        -A <interval>
+            Sets the interval at which the AC adapter state will be polled in
+            tenths  of a second (default is 50).
+            (Requires the '-a' option above.)
+
+        -C
+            Run at maximum speed when AC adapter is connected.
+            (Requires the '-a' option above.)
+
+        -D
+            Do NOT force minimum speed when AC adapter is disconnected.
+            (Requires the '-a' option above.)
+
+        -r
+            Restores previous speed on program exit.
+
+        -S "<CPU core 1> [[<CPU core 2>] ...]"
+            Manage only a single group of CPU cores.  All of the specified
+            cores will controlled as a single group (locked to the same speed)
+            and are in the range 0 to n-1 where 'n' is the total number of CPU
+            cores in the system.  Note that when specifying multiple cores the
+            list must be enclosed in quotes.  Without this option the program
+            creates copies of itself to manage every core of every CPU in the
+            system and automatically determines core groups. If you are running
+            on an old kernel and get an error message about not being able to
+            open an "affected_cpus" file then you must run this program
+            separately for each group of cores that must be controlled together
+            (which probably means for each physical CPU) and use this option.
+
+    To have a CPU core stay at the highest clock speed to maximize performance
+    send the process controlling that CPU core the SIGUSR1 signal.
+
+    To have a CPU core stay at the lowest clock speed to maximize battery life
+    send the process controlling that CPU core the SIGUSR2 signal.
+
+    To resume having a CPU core's clock speed dynamically scaled send the
+    process controlling that CPU core the SIGHUP signal.
+
+Author:
+    Carl E. Thompson - cet [at] carlthompson.net (Copyright 2002 - 2008)
+

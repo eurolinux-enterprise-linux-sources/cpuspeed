@@ -1,0 +1,40 @@
+Version 1.5
+    Reworked multi-core CPU handling. Now automatically figures out which cores
+    should be controlled as a single group vs. controlled individually
+
+    Minor compiling, debugging and optimization changes
+
+Version 1.2.1
+    Can now better handle processors with a large number of speed steps (>20)
+
+    Configurable maximum and minimum CPU speeds
+
+    Option to maximize speed when AC adapter connected
+
+    Option to NOT minimize speed when AC adapter disconnected
+
+    Consider I/O wait time as idle time
+
+    Option to restore previous speed on program exit
+
+    Can set polling interval for CPU idle, AC adapter and temperature separately
+
+    Better Red Hat / Fedora Core / SuSE script integration
+
+    More efficient startup sequence (fewer speed changes necessary)
+
+    Full multi-processor support
+
+    Try to load default list of drivers if none specified
+
+Version 1.1
+    One binary works on both 2.4 and 2.5+ kernels
+
+    Updated to work with latest sysfs directory structure (tested with 2.5.75)
+
+    Now the program is even better at making sure tempermental Athlons don't
+    crash no matter what state the CPU is in on startup
+
+    Simplified things by having just one threshold level instead of two
+
+    Replaced floating point math with integer

@@ -1,0 +1,8 @@
+Example:
+    cpuspeed -d -i 10 -t /proc/acpi/thermal_zone/THRM/temperature 79 \
+        -a /proc/acpi/ac_adapter/ACAD/state
+
+    This will have the program check (and possibly change) the CPU speed once
+    every second and go to minimum CPU speed if the temperature goes above 79
+    or the AC adapter is disconnected.
+

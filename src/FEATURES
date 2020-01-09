@@ -1,0 +1,22 @@
+* Dynamically adjusts CPU speed and voltage based on demand for CPU
+  (idle/work ratio threshold is user-configurable)
+* Automatically detects available processor speeds
+* For normal operation, no configuration or options are necessary.  Just
+  run it!
+* Full multiprocessor and multi-core support.  Automatically determines
+  which cores need to be controlled together or separately (configurable)
+* Configurable minimum and maximum allowed speeds
+* Can minimize CPU speed and voltage if AC power is disconnected from the
+  computer (requires ACPI)
+* Can maximize CPU speed if AC power is connected to the computer (requires
+  ACPI)
+* Can minimize CPU speed and voltage if CPU temperature gets too high
+  (Requires ACPI, temperature is user-configurable)
+* Can be told to lock CPU at minimum or maximum frequency via signals
+* "nice()'d" processes and those waiting for I/O will not increase CPU speed
+* Polling interval for CPUs, temperature and AC adapter configurable
+  separately
+* Crash-proof frequency switching even if you have a very tempermental CPU
+  and an obsolete version of CPUFreq (some AMD mobile Athlons in particular)
+* handles strange processors with lots of little steps
+* More that I'm forgetting.
